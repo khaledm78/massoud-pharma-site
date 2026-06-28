@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-cairo), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cairo), sans-serif;
+  --font-arabic: var(--font-cairo), sans-serif;
+  
+  /* Sophisticated Navy Blue Palette */
+  --color-brand-navy-50: #f4f7fb;
+  --color-brand-navy-100: #e1eaf5;
+  --color-brand-navy-200: #c2d5eb;
+  --color-brand-navy-500: #143A6E; /* Official Navy Blue Authority */
+  --color-brand-navy-600: #0f2c54;
+  --color-brand-navy-700: #0b203c;
+  --color-brand-navy-800: #071426;
+  --color-brand-navy-900: #040c17;
+  --color-brand-navy-950: #02060b;
+  
+  /* Premium Charcoal Grey Palette */
+  --color-brand-charcoal-50: #f8f8f8;
+  --color-brand-charcoal-100: #f0f0f0;
+  --color-brand-charcoal-200: #e0e0e0;
+  --color-brand-charcoal-300: #cacaca;
+  --color-brand-charcoal-400: #a0a0a0;
+  --color-brand-charcoal-500: #6b6b6b;
+  --color-brand-charcoal-600: #4b4b4b;
+  --color-brand-charcoal-700: #3B3B3B; /* Official Charcoal Gray */
+  --color-brand-charcoal-800: #2d2d2d;
+  --color-brand-charcoal-900: #1c1c1c;
+  --color-brand-charcoal-950: #0f0f0f;
+  
+  /* Light Orange Accents (Unified with Yellow for compatibility) */
+  --color-brand-orange: #F89C3A;
+  --color-brand-yellow: #F89C3A; /* Premium Light Orange Accent */
+  --color-brand-yellow-light: #fef5ec;
+  --color-brand-yellow-dark: #df7e14;
+}
+
+

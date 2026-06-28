@@ -1,0 +1,6 @@
+{
+  "name": "Massoud Pharma",
+  "description": "An interactive, highly accessible pharmaceutical brochure and product catalog for Massoud Pharma, featuring search, therapeutic categories, and full WCAG 2.1 accessibility.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
