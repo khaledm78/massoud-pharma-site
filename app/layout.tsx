@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import { Cairo } from 'next/font/google';
-import './globals.css'; // Global styles
+import { basePath } from '../lib/utils';
+import './globals.css';
 
 const cairo = Cairo({ 
   subsets: ['arabic', 'latin'], 
@@ -10,8 +11,20 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: 'Massoud Pharma - Interactive Pharmaceutical Brochure',
-  description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma. Discover our therapeutic divisions, high-quality manufacturing certificates, and comprehensive product catalog.',
+  title: 'Massoud Pharma | مسعود للصناعات الدوائية',
+  description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma — كتيب تعريفي تفاعلي لشركة مسعود للصناعات الدوائية، يضم دليل المنتجات الكامل والملف التعريفي للشركة ومعايير الجودة المعتمدة.',
+  openGraph: {
+    title: 'Massoud Pharma | مسعود للصناعات الدوائية',
+    description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma.',
+    images: [`${basePath}/logo-header.png`],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Massoud Pharma | مسعود للصناعات الدوائية',
+    description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma.',
+    images: [`${basePath}/logo-header.png`],
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

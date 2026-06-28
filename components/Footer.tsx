@@ -1,11 +1,77 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, Phone, MapPin, Printer, Globe, Pill, X } from 'lucide-react';
 
 interface FooterProps {
   lang: 'en' | 'ar';
+}
+
+// Lightweight, dependency-free accessibility helper for modals:
+// - Closes on Escape
+// - Traps Tab/Shift+Tab focus cycling inside the modal
+// - Returns focus to the element that opened the modal when it closes
+function useModalA11y(
+  isOpen: boolean,
+  containerRef: React.RefObject<HTMLElement>,
+  onClose: () => void
+) {
+  const previouslyFocused = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    previouslyFocused.current = document.activeElement as HTMLElement;
+
+    const getFocusable = () => {
+      const container = containerRef.current;
+      if (!container) return [] as HTMLElement[];
+      return Array.from(
+        container.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        )
+      );
+    };
+
+    const focusable = getFocusable();
+    if (focusable.length > 0) {
+      focusable[0].focus();
+    } else {
+      containerRef.current?.focus();
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const items = getFocusable();
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      previouslyFocused.current?.focus();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 }
 
 export default function Footer({ lang }: FooterProps) {
@@ -14,15 +80,21 @@ export default function Footer({ lang }: FooterProps) {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  const contactModalRef = useRef<HTMLDivElement>(null);
+  const privacyModalRef = useRef<HTMLDivElement>(null);
+
+  useModalA11y(isContactModalOpen, contactModalRef, () => setIsContactModalOpen(false));
+  useModalA11y(isPrivacyModalOpen, privacyModalRef, () => setIsPrivacyModalOpen(false));
+
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Body Scroll Lock implementation
+  // Body Scroll Lock implementation (now correctly covers BOTH modals)
   useEffect(() => {
-    if (isContactModalOpen) {
+    if (isContactModalOpen || isPrivacyModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -30,7 +102,7 @@ export default function Footer({ lang }: FooterProps) {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isContactModalOpen]);
+  }, [isContactModalOpen, isPrivacyModalOpen]);
 
   return (
     <>
@@ -38,14 +110,12 @@ export default function Footer({ lang }: FooterProps) {
       <footer className="bg-white text-gray-500 border-t border-slate-200" aria-label="Footer Navigation">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-sans">
-            {/* Copyright notice */}
             <p className="text-slate-500 text-center md:text-left rtl:md:text-right">
               {isAr 
                 ? '© 2026 شركة مسعود للأدوية. جميع الحقوق محفوظة.' 
                 : '© 2026 Massoud Pharma. All Rights Reserved.'}
             </p>
             
-            {/* Minimalist interactive links */}
             <div className="flex items-center gap-6">
               <button 
                 onClick={() => setIsContactModalOpen(true)}
@@ -73,7 +143,6 @@ export default function Footer({ lang }: FooterProps) {
             aria-modal="true"
             aria-labelledby="corporate-contact-title"
           >
-            {/* Smooth Backdrop Transition (Click to close) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -83,15 +152,15 @@ export default function Footer({ lang }: FooterProps) {
               className="absolute inset-0"
             />
 
-            {/* Scale "Pop" Entry Modal Container */}
             <motion.div 
+              ref={contactModalRef}
+              tabIndex={-1}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
               className="relative overflow-hidden w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white p-5 sm:p-6 shadow-2xl shadow-blue-900/10 border border-slate-200 text-left rtl:text-right z-10"
             >
-              {/* Elegant absolute-positioned SVG Background Watermark (Globe/Network/Radio Waves) */}
               <div className="absolute -bottom-10 -right-10 w-96 h-96 text-slate-900 opacity-[0.03] pointer-events-none overflow-hidden select-none z-0">
                 <svg
                   viewBox="0 0 200 200"
@@ -104,15 +173,12 @@ export default function Footer({ lang }: FooterProps) {
                   <circle cx="100" cy="100" r="80" />
                   <circle cx="100" cy="100" r="55" />
                   <circle cx="100" cy="100" r="30" />
-                  {/* Meridians / Ellipses */}
                   <ellipse cx="100" cy="100" rx="80" ry="30" />
                   <ellipse cx="100" cy="100" rx="30" ry="80" />
-                  {/* Diagonal lines for global grid feel */}
                   <line x1="20" y1="100" x2="180" y2="100" />
                   <line x1="100" y1="20" x2="100" y2="180" />
                   <line x1="43" y1="43" x2="157" y2="157" />
                   <line x1="43" y1="157" x2="157" y2="43" />
-                  {/* Nodes */}
                   <circle cx="100" cy="20" r="3" fill="currentColor" />
                   <circle cx="100" cy="180" r="3" fill="currentColor" />
                   <circle cx="20" cy="100" r="3" fill="currentColor" />
@@ -124,7 +190,6 @@ export default function Footer({ lang }: FooterProps) {
                 </svg>
               </div>
 
-              {/* Modal Header */}
               <div className="relative z-10 flex items-start justify-between mb-5 gap-4 border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-50 text-[#FACC15] border border-slate-200 shadow-sm">
@@ -148,17 +213,14 @@ export default function Footer({ lang }: FooterProps) {
                 </button>
               </div>
 
-              {/* Modal Body with responsive balanced grid layout */}
               <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-5 font-sans text-xs text-slate-800">
                 
-                {/* Left Column: Digital Channels (Stacked to fill vertical space perfectly) */}
                 <div className="flex flex-col gap-3">
                   <h3 className="text-[10px] font-bold text-indigo-900 uppercase tracking-widest">
                     {isAr ? 'القنوات الرقمية المباشرة' : 'Direct Digital Channels'}
                   </h3>
                   
                   <div className="flex flex-col gap-3.5 flex-grow">
-                    {/* Email Copy Card */}
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex flex-col justify-between hover:border-slate-300 transition-colors flex-1">
                       <div>
                         <span className="block font-bold text-[11px] text-blue-950 mb-0.5">
@@ -179,7 +241,6 @@ export default function Footer({ lang }: FooterProps) {
                       </button>
                     </div>
 
-                    {/* Mobile Copy Card */}
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex flex-col justify-between hover:border-slate-300 transition-colors flex-1">
                       <div>
                         <span className="block font-bold text-[11px] text-blue-950 mb-0.5">
@@ -200,7 +261,6 @@ export default function Footer({ lang }: FooterProps) {
                       </button>
                     </div>
 
-                    {/* Website Card */}
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-slate-300 transition-colors">
                       <div className="flex items-center gap-2.5">
                         <Globe className="h-4.5 w-4.5 text-[#FACC15]" />
@@ -225,14 +285,12 @@ export default function Footer({ lang }: FooterProps) {
                   </div>
                 </div>
 
-                {/* Right Column: Head Office & Factory (Stacked & perfectly aligned in height) */}
                 <div className="flex flex-col gap-3 h-full">
                   <h3 className="text-[10px] font-bold text-indigo-900 uppercase tracking-widest">
                     {isAr ? 'المواقع والمقرات الرسمية' : 'Corporate Locations'}
                   </h3>
 
                   <div className="flex flex-col gap-3.5 flex-grow">
-                    {/* Section 2: Head Office */}
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex flex-col justify-between hover:border-slate-300 transition-colors flex-1">
                       <div className="flex items-start gap-2.5">
                         <MapPin className="h-4.5 w-4.5 shrink-0 text-[#FACC15] mt-0.5" />
@@ -262,7 +320,6 @@ export default function Footer({ lang }: FooterProps) {
                       </div>
                     </div>
 
-                    {/* Section 3: The Factory */}
                     <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex items-start gap-2.5 hover:border-slate-300 transition-colors flex-1">
                       <BuildingWatermark className="h-4.5 w-4.5 shrink-0 text-[#FACC15] mt-0.5" />
                       <div>
@@ -279,7 +336,6 @@ export default function Footer({ lang }: FooterProps) {
 
               </div>
 
-              {/* Modal Footer (Sleek snug design) */}
               <div className="relative z-10 mt-5 pt-3 border-t border-slate-100 flex justify-end">
                 <button
                   onClick={() => setIsContactModalOpen(false)}
@@ -311,6 +367,8 @@ export default function Footer({ lang }: FooterProps) {
             />
 
             <motion.div 
+              ref={privacyModalRef}
+              tabIndex={-1}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -364,7 +422,6 @@ export default function Footer({ lang }: FooterProps) {
   );
 }
 
-// Custom simple building icon
 function BuildingWatermark(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
