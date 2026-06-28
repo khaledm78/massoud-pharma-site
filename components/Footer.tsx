@@ -14,7 +14,7 @@ interface FooterProps {
 // - Returns focus to the element that opened the modal when it closes
 function useModalA11y(
   isOpen: boolean,
-  containerRef: React.RefObject<HTMLElement>,
+  containerRef: React.RefObject<HTMLElement | null>,
   onClose: () => void
 ) {
   const previouslyFocused = useRef<HTMLElement | null>(null);

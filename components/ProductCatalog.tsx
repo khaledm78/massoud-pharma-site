@@ -4,7 +4,7 @@ import React, { useState, useRef, useId, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, FileText, AlertCircle, RefreshCw, Layers, X, Pill, Syringe, Package } from 'lucide-react';
 import { catalogData, getComputedCategoryTabs, Product, ProductVariant } from '../data/catalogData';
-import { convertToWesternNumerals } from '../lib/utils';
+import { convertToWesternNumerals, getProductImageUrl, getVariantImageUrl } from '../lib/utils';
 import { useDebounce } from '../hooks/use-debounce';
 import Image from 'next/image';
 import ProductImage from './ProductImage';
@@ -83,7 +83,7 @@ const ProductCardImage = ({ product, isAr }: { product: Product; isAr: boolean }
           {/* Center: Mathematically constrained premium clinical/tablet image layout using ProductImage */}
           <div className="relative w-full h-full max-h-20 sm:max-h-28 z-10 animate-fade-in flex items-center justify-center">
             <ProductImage
-              src={product.mainImage || firstDosage?.variantImage}
+              src={product.mainImage || getProductImageUrl(product.id)}
               alt={isAr ? product.name.ar : product.name.en}
               className="w-full h-full text-brand-navy-500"
             />
@@ -413,7 +413,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
     setSelectedVariantIndex(0);
-    const img = product.variants?.[0]?.variantImage || product.mainImage;
+    const img = product.variants?.[0]?.variantImage || getVariantImageUrl(product.id, 0);
     setActiveImage(img);
     setIsImageLoading(true);
     setImgError(false);

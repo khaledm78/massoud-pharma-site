@@ -17,3 +17,14 @@ export function convertToWesternNumerals(str: string | undefined | null): string
 
 // المسار الفرعي الحالي لمعاينة GitHub Pages (فاضٍ تلقائياً عند النشر على الدومين الرسمي لاحقاً)
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
+// الصورة "الجماعية" لكل منتج (تظهر بالبطاقة المغلقة في الكتالوج)
+export function getProductImageUrl(id: string): string {
+  return `${basePath}/products/${id}.png`;
+}
+
+// صورة العيار الفردي المحدد (تظهر عند فتح البطاقة واختيار عيار معيّن)
+// variantIndex يبدأ من صفر (مطابقاً لترتيب العيارات بالبيانات)
+export function getVariantImageUrl(id: string, variantIndex: number): string {
+  return `${basePath}/products/${id}-${variantIndex + 1}.png`;
+}
