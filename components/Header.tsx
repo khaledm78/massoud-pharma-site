@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Languages } from 'lucide-react';
 import { motion } from 'motion/react';
+import { basePath } from '../lib/utils';
 
 interface HeaderProps {
   onNavClick: (sectionId: string) => void;
@@ -27,7 +28,6 @@ export default function Header({ onNavClick, activeSection, lang, setLang }: Hea
     setIsMobileMenuOpen(false);
   };
 
-  // Translations specifically for header interactions
   const hTrans = {
     en: {
       logoTitle: 'MASSOUD',
@@ -57,7 +57,7 @@ export default function Header({ onNavClick, activeSection, lang, setLang }: Hea
           }}
         >
           <Image 
-            src="/logo-header.png" 
+            src={`${basePath}/logo-header.png`}
             alt="Massoud Pharma" 
             width={1800}
             height={604}
@@ -99,7 +99,6 @@ export default function Header({ onNavClick, activeSection, lang, setLang }: Hea
         {/* Language Toggle & Action Controls */}
         <div className="flex items-center gap-2">
           
-          {/* Enhanced English/Arabic toggle - Sleeker and Smaller */}
           <button
             onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
             className="flex h-8 items-center gap-1 px-3 text-xs font-medium rounded-full border border-slate-200 bg-white/60 backdrop-blur-md shadow-sm hover:bg-slate-50 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy-500 cursor-pointer"
@@ -112,7 +111,6 @@ export default function Header({ onNavClick, activeSection, lang, setLang }: Hea
             <span className="h-1 w-1 rounded-full bg-brand-yellow animate-pulse shrink-0" />
           </button>
 
-          {/* Contact CTA Button */}
           <button
             onClick={() => handleNav('products')}
             className="hidden sm:inline-flex h-9 items-center justify-center rounded-lg bg-[#FACC15] px-4 py-2 font-sans text-xs font-bold text-blue-950 hover:bg-[#FDE047] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy-500 focus-visible:ring-offset-2 cursor-pointer"
@@ -120,7 +118,6 @@ export default function Header({ onNavClick, activeSection, lang, setLang }: Hea
             {t.browseBtn}
           </button>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="flex h-11 w-11 items-center justify-center rounded-lg text-brand-charcoal-500 hover:bg-brand-charcoal-50 hover:text-brand-charcoal-900 md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy-500"
@@ -134,7 +131,6 @@ export default function Header({ onNavClick, activeSection, lang, setLang }: Hea
 
       </div>
 
-      {/* Mobile Navigation Panel */}
       {isMobileMenuOpen && (
         <nav
           id="mobile-navigation"

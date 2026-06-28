@@ -14,3 +14,6 @@ export function convertToWesternNumerals(str: string | undefined | null): string
   }
   return result;
 }
+
+// المسار الفرعي الحالي لمعاينة GitHub Pages (فاضٍ تلقائياً عند النشر على الدومين الرسمي لاحقاً)
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';

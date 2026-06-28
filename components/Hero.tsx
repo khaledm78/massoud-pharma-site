@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'motion/react';
 import { Atom, Sparkles, ArrowRight, ArrowLeft } from 'lucide-react';
+import { basePath } from '../lib/utils';
 
 interface HeroProps {
   onExploreClick: () => void;
@@ -38,29 +39,22 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
   return (
     <section className="relative overflow-hidden w-full min-h-[75vh] flex items-center justify-center bg-[#0a192f] text-white py-16 md:py-24 border-b border-slate-900">
       
-      {/* Premium Background Architecture (Depth & Luxury glows + Molecular Watermark) */}
       <div className="absolute inset-0 pointer-events-none select-none z-0">
-        {/* Radial Glow Spotlight */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(248,156,58,0.08)_0%,transparent_50%)]"></div>
         
-        {/* Hexagon/Molecular Watermark Pattern (CSS Base64 inline SVG) */}
         <div 
           className="absolute inset-0 opacity-[0.03] pointer-events-none" 
           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill-opacity='0' stroke='%23ffffff' stroke-width='1'/%3E%3C/svg%3E")`, backgroundSize: '60px 60px' }}
         ></div>
 
-        {/* Large Centered Glowing Navy/Blue Orb */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-blue-600/10 md:bg-blue-600/15 blur-[100px] md:blur-[130px] rounded-full animate-pulse" style={{ animationDuration: '8s' }} />
         
-        {/* Decorative Secondary Ambient Spots */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-emerald-500/5 blur-[90px] rounded-full" />
         <div className="absolute bottom-10 right-10 w-72 h-72 bg-amber-500/5 blur-[90px] rounded-full" />
       </div>
 
-      {/* Flawless Centered Layout & Staggered Animations */}
       <div className="relative flex flex-col items-center justify-center text-center z-10 w-full max-w-4xl px-4 sm:px-6 lg:px-8">
         
-        {/* Element 1: Animated Logo */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: [0, -12, 0] }}
@@ -68,7 +62,7 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
           className="mb-6 flex items-center justify-center"
         >
           <Image 
-            src="/logo-hero.png" 
+            src={`${basePath}/logo-hero.png`}
             alt="Massoud Pharma" 
             width={280} 
             height={280} 
@@ -78,7 +72,6 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
           />
         </motion.div>
 
-        {/* Element 2: Bilingual Typography (Directly below animated logo) */}
         <div className="flex flex-col items-center justify-center text-center mt-6 mb-6">
           {lang === 'en' ? (
             <>
@@ -101,7 +94,6 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
           )}
         </div>
 
-        {/* Element 3: The Science Badge with glassmorphism */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -115,7 +107,6 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
           <Sparkles className="h-3 w-3 text-brand-yellow/80" />
         </motion.div>
 
-        {/* Paragraph Description */}
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -125,7 +116,6 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
           {t.desc}
         </motion.p>
 
-        {/* Premium CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -146,7 +136,7 @@ export default function Hero({ onExploreClick, onOverviewClick, lang }: HeroProp
 
           <button
             onClick={onOverviewClick}
-            className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-7 font-sans text-xs font-bold text-slate-200 hover:bg-white/10 hover:text-white transition-all duration-300 backdrop-blur-xs cursor-pointer"
+            className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/5 px-7 font-sans text-xs font-bold text-slate-200 hover:bg-white/10 hover:text-white transition-all duration-300 backdrop-xs"
           >
             <span>{t.ctaOverview}</span>
           </button>
