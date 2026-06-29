@@ -11,6 +11,7 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'Massoud Pharma | مسعود للصناعات الدوائية',
   description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma — كتيب تعريفي تفاعلي لشركة مسعود للصناعات الدوائية، يضم دليل المنتجات الكامل والملف التعريفي للشركة ومعايير الجودة المعتمدة.',
   openGraph: {
