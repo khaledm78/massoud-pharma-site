@@ -165,14 +165,13 @@ const ForceWesternDigits = ({ text }: { text: string | undefined | null }) => {
 };
 
 const getCategoryStyles = (id: string, isActive: boolean) => {
-  const base = "relative px-5 py-2.5 min-h-[44px] rounded-full font-sans text-xs font-bold transition-all whitespace-nowrap shrink-0 snap-center md:snap-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 border cursor-pointer select-none transition-all duration-300";
-  
+  const base = "relative px-5 py-2.5 min-h-[44px] rounded-full font-sans text-xs font-bold transition-all duration-300 whitespace-nowrap shrink-0 snap-center md:snap-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 cursor-pointer select-none";
+
   if (!isActive) {
-    return `${base} bg-white/50 backdrop-blur-md border border-white/40 text-slate-700 hover:bg-white/80 shadow-sm`;
+    return `${base} bg-white/10 backdrop-blur-md border border-white/20 text-white/90 hover:bg-white hover:text-[#143A6E] hover:-translate-y-0.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.15)]`;
   }
 
-  // Active state: pure White background, Navy text, Light Orange dot indicator
-  return `${base} bg-white border-white text-[#143A6E] shadow-[0_8px_24px_rgba(255,255,255,0.15)] font-black after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-[#F89C3A] after:rounded-full`;
+  return `${base} bg-gradient-to-br from-[#FACC15] to-[#F89C3A] border border-white/40 text-[#143A6E] font-black shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_20px_rgba(248,156,58,0.35)] after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-[#143A6E] after:rounded-full`;
 };
 
 
@@ -628,7 +627,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
             <label htmlFor={searchInputId} className="sr-only">
               {t.searchPlaceholder}
             </label>
-            <div className="relative rounded-xl shadow-sm focus-within:shadow-md transition-shadow duration-300 bg-slate-50 border border-brand-charcoal-200/80">
+            <div className="relative rounded-xl bg-white border border-brand-charcoal-200/70 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_1px_2px_rgba(20,58,110,0.04)] focus-within:shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_0_0_4px_rgba(250,204,21,0.25)] focus-within:border-[#FACC15] transition-all duration-300">
               <div className={`pointer-events-none absolute inset-y-0 flex items-center ${isAr ? 'right-4' : 'left-4'}`}>
                 <Search className="h-4.5 w-4.5 text-brand-navy-500/80" aria-hidden="true" />
               </div>
