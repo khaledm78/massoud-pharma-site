@@ -706,32 +706,19 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
       {/* 3. THE PRODUCT GRID BAND: Soft Gray Canvas */}
       <div className="relative bg-slate-50 py-12 sm:py-16 overflow-hidden z-10">
         
-        {/* Tilted Syrup Bottle Watermark - bleeding off the top-right corner */}
-        <div className="pointer-events-none absolute -top-10 -right-8 sm:-right-14 z-0 opacity-[0.06] text-brand-navy-500 w-[160px] sm:w-[220px] transform-gpu rotate-[12deg]">
-          <svg viewBox="0 0 100 160" fill="none" stroke="currentColor" strokeWidth="1.2" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+        {/* Large Anchor Bottle Watermark - vertically centered, side-fade only, no vertical clipping */}
+        <div 
+          className="pointer-events-none absolute top-0 right-0 h-full z-0 opacity-[0.05] text-brand-navy-500 flex items-center"
+          style={{
+            width: 'min(38vw, 420px)',
+            WebkitMaskImage: 'linear-gradient(to left, black 0%, black 30%, transparent 85%)',
+            maskImage: 'linear-gradient(to left, black 0%, black 30%, transparent 85%)',
+          }}
+        >
+          <svg viewBox="0 0 100 160" fill="none" stroke="currentColor" strokeWidth="1" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto translate-x-8">
             <rect x="32" y="8" width="20" height="14" rx="2" />
             <path d="M37 22 L37 38 Q37 44 30 50 L30 142 Q30 152 40 152 L60 152 Q70 152 70 142 L70 50 Q63 44 63 38 L63 22" />
             <line x1="30" y1="95" x2="70" y2="95" />
-          </svg>
-        </div>
-
-        {/* Vial Watermark - bleeding off the bottom-left corner */}
-        <div className="pointer-events-none absolute -bottom-6 -left-6 sm:-left-10 z-0 opacity-[0.06] text-brand-navy-500 w-[110px] sm:w-[150px] transform-gpu rotate-[-10deg]">
-          <svg viewBox="0 0 60 140" fill="none" stroke="currentColor" strokeWidth="1.2" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <rect x="20" y="5" width="20" height="10" rx="1" />
-            <path d="M20 15 L20 30 L14 40 L14 120 Q14 130 24 130 L36 130 Q46 130 46 120 L46 40 L40 30 L40 15" />
-            <line x1="14" y1="85" x2="46" y2="85" />
-            <line x1="14" y1="100" x2="46" y2="100" strokeDasharray="2 2" />
-          </svg>
-        </div>
-
-        {/* Mortar & Pestle Watermark - subtle accent near the footer transition */}
-        <div className="pointer-events-none absolute -bottom-10 right-[8%] z-0 opacity-[0.05] text-brand-navy-500 w-[130px] sm:w-[170px] transform-gpu rotate-[6deg]">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.3" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <path d="M20 50 Q20 82 50 86 Q80 82 80 50" />
-            <ellipse cx="50" cy="50" rx="30" ry="8" />
-            <line x1="56" y1="14" x2="70" y2="46" strokeLinecap="round" />
-            <ellipse cx="72" cy="49" rx="6" ry="4" transform="rotate(35 72 49)" />
           </svg>
         </div>
 
@@ -829,8 +816,8 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                         <svg key="wm4" viewBox="0 0 140 80" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><rect x="6" y="10" width="128" height="60" rx="30" /><line x1="70" y1="10" x2="70" y2="70" strokeDasharray="3 3" /></svg>,
                         <svg key="wm5" viewBox="0 0 120 80" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="4" y="4" width="112" height="72" rx="8" /><circle cx="22" cy="22" r="9" /><circle cx="48" cy="22" r="9" /><circle cx="74" cy="22" r="9" /><circle cx="100" cy="22" r="9" /><circle cx="22" cy="58" r="9" /><circle cx="48" cy="58" r="9" /><circle cx="74" cy="58" r="9" /><circle cx="100" cy="58" r="9" /></svg>,
                       ];
-                      const showWatermark = groupIdx % 2 === 0 && groupIdx > 0;
-                      const watermarkOnRight = (groupIdx / 2) % 2 === 0;
+                      const showWatermark = groupIdx > 0;
+                      const watermarkOnRight = groupIdx % 2 === 0;
 
                       return (
                         <React.Fragment key={category.id}>
@@ -848,7 +835,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                                     : 'linear-gradient(to right, black 0%, transparent 75%)',
                                 }}
                               >
-                                {pharmaWatermarks[(groupIdx / 2) % pharmaWatermarks.length]}
+                                {pharmaWatermarks[groupIdx % pharmaWatermarks.length]}
                               </div>
                             )}
                             <h3 className={`text-xl md:text-2xl font-bold text-[#143A6E] whitespace-nowrap ${isAr ? 'pl-6 pr-2 font-arabic' : 'pl-2 pr-6 font-sans'}`}>
