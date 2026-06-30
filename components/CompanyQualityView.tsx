@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
+import { basePath } from '../lib/utils';
 import { 
   Building2, 
   Award, 
@@ -171,6 +172,9 @@ export default function CompanyQualityView({ lang }: CompanyQualityViewProps) {
       <header className="relative w-full bg-[#143A6E] text-white py-12 md:py-16 overflow-hidden z-10 border-b border-white/10">
         {/* Soft background glow */}
         <div className="absolute inset-0 pointer-events-none select-none z-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_75%)]" />
+        <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-10 sm:right-0 z-0 opacity-[0.10] w-[50vw] max-w-[420px] min-w-[200px]">
+          <img src={`${basePath}/watermark-company-white.svg`} alt="" className="w-full h-auto" />
+        </div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <span className="text-xs font-black tracking-widest text-[#FACC15] uppercase">
@@ -278,21 +282,7 @@ export default function CompanyQualityView({ lang }: CompanyQualityViewProps) {
         <div className="absolute inset-0 pointer-events-none select-none z-0 bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.06)_0%,transparent_70%)]" />
         <div className="absolute top-10 right-10 w-[300px] h-[300px] rounded-full bg-[#FACC15]/5 blur-3xl pointer-events-none select-none z-0" />
 
-        {/* Abstract Production Watermark related to manufacturing/science */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center opacity-5 z-0">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" className="w-96 h-96 text-white transform-gpu">
-            <circle cx="20" cy="30" r="3" fill="currentColor" />
-            <circle cx="50" cy="20" r="4" />
-            <circle cx="80" cy="35" r="3" fill="currentColor" />
-            <circle cx="35" cy="65" r="5" />
-            <circle cx="65" cy="70" r="3" />
-            <line x1="20" y1="30" x2="50" y2="20" />
-            <line x1="50" y1="20" x2="80" y2="35" />
-            <line x1="50" y1="20" x2="35" y2="65" />
-            <line x1="35" y1="65" x2="65" y2="70" />
-            <line x1="80" y1="35" x2="65" y2="70" strokeDasharray="2 2" />
-          </svg>
-        </div>
+        
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div 
@@ -368,13 +358,7 @@ export default function CompanyQualityView({ lang }: CompanyQualityViewProps) {
       {/* Band 4: Accreditations (Light Canvas + Shield Watermark + Text Cleanup) */}
       <section className="relative w-full bg-slate-50 py-12 sm:py-16 overflow-hidden z-10">
         
-        {/* Shield Watermark */}
-        <div className="pointer-events-none absolute right-0 bottom-0 z-0 opacity-[0.03] text-[#143A6E] w-[120vw] md:w-[50vw] max-w-2xl transform rotate-12">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" className="w-full h-full">
-            <path d="M 50,5 L 85,15 L 85,55 C 85,75 70,90 50,95 C 30,90 15,75 15,55 L 15,15 Z" strokeWidth="0.5" />
-            <path d="M 35,50 L 45,60 L 65,35" strokeWidth="0.75" />
-          </svg>
-        </div>
+        
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div 

@@ -4,7 +4,7 @@ import React, { useState, useRef, useId, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, FileText, AlertCircle, RefreshCw, Layers, X, Pill, Syringe, Package } from 'lucide-react';
 import { catalogData, getComputedCategoryTabs, Product, ProductVariant } from '../data/catalogData';
-import { convertToWesternNumerals, getProductImageUrl, getVariantImageUrl } from '../lib/utils';
+import { convertToWesternNumerals, getProductImageUrl, getVariantImageUrl, basePath } from '../lib/utils';
 import { useDebounce } from '../hooks/use-debounce';
 import Image from 'next/image';
 import ProductImage from './ProductImage';
@@ -584,20 +584,16 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
       <div className="relative z-10 bg-white py-12 sm:py-16 overflow-hidden">
         
         {/* Massive, absolute-positioned pharmaceutical / medical watermark behind text */}
-        <div className="pointer-events-none absolute top-10 right-0 z-0 opacity-[0.02] text-slate-900 w-[550px] h-[550px] transform-gpu overflow-hidden">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" className="w-full h-full">
-            <circle cx="50" cy="50" r="38" />
-            <circle cx="50" cy="50" r="28" strokeDasharray="3 3" />
-            <circle cx="50" cy="50" r="10" />
-            <line x1="50" y1="0" x2="50" y2="100" />
-            <line x1="0" y1="50" x2="100" y2="50" />
-            <path d="M 20,20 L 80,80 M 80,20 L 20,80" strokeWidth="0.25" />
-            <polygon points="50,15 85,50 50,85 15,50" strokeWidth="0.5" />
-            <circle cx="50" cy="15" r="3.5" fill="currentColor" />
-            <circle cx="50" cy="85" r="3.5" fill="currentColor" />
-            <circle cx="15" cy="50" r="3.5" fill="currentColor" />
-            <circle cx="85" cy="50" r="3.5" fill="currentColor" />
-          </svg>
+        <div 
+          className="pointer-events-none absolute top-0 left-0 z-0"
+          style={{ 
+            height: '85%',
+            maxHeight: '380px',
+            WebkitMaskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 85%)',
+            maskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 85%)',
+          }}
+        >
+          <img src={`${basePath}/mp-icon-navy.svg`} alt="" className="h-full w-auto opacity-[0.08]" />
         </div>
 
         <div className="sr-only" aria-live="polite" role="status">
@@ -665,14 +661,11 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
       {/* 2. THE NAVIGATION BAND: Premium Navy Zone */}
       <div className="relative bg-[#143A6E] py-8 overflow-hidden z-10">
         
-        {/* Watermark (Abstract Medical SVG) */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none flex items-center justify-center opacity-5 z-0">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" className="w-96 h-96 text-white transform-gpu">
-            <circle cx="50" cy="50" r="38" />
-            <circle cx="50" cy="50" r="28" strokeDasharray="3 3" />
-            <circle cx="50" cy="50" r="14" />
-            <path d="M 10,50 L 90,50 M 50,10 L 50,90" strokeWidth="0.3" />
-            <path d="M 22,22 L 78,78 M 78,22 L 22,78" strokeWidth="0.2" strokeDasharray="1 2" />
+        {/* Capsule Watermark - bleeding off the bottom-right corner */}
+        <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-10 sm:-right-16 z-0 opacity-[0.10] w-[220px] sm:w-[300px] transform-gpu rotate-[-14deg]">
+          <svg viewBox="0 0 100 60" fill="none" stroke="white" strokeWidth="1.3" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <rect x="4" y="12" width="92" height="36" rx="18" />
+            <line x1="50" y1="12" x2="50" y2="48" />
           </svg>
         </div>
 
@@ -713,13 +706,32 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
       {/* 3. THE PRODUCT GRID BAND: Soft Gray Canvas */}
       <div className="relative bg-slate-50 py-12 sm:py-16 overflow-hidden z-10">
         
-        {/* Watermark (Brand Echo) - stylized cross or clinical circle */}
-        <div className="absolute pointer-events-none opacity-[0.03] text-brand-navy-500 w-[150vw] md:w-[60vw] max-w-4xl transform -rotate-12 bottom-10 right-0 z-0">
-          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" className="w-full h-full">
-            <circle cx="50" cy="50" r="42" />
-            <circle cx="50" cy="50" r="32" strokeDasharray="4 4" />
-            <polygon points="50,8 92,50 50,92 8,50" />
-            <circle cx="50" cy="50" r="10" fill="currentColor" />
+        {/* Tilted Syrup Bottle Watermark - bleeding off the top-right corner */}
+        <div className="pointer-events-none absolute -top-10 -right-8 sm:-right-14 z-0 opacity-[0.06] text-brand-navy-500 w-[160px] sm:w-[220px] transform-gpu rotate-[12deg]">
+          <svg viewBox="0 0 100 160" fill="none" stroke="currentColor" strokeWidth="1.2" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <rect x="32" y="8" width="20" height="14" rx="2" />
+            <path d="M37 22 L37 38 Q37 44 30 50 L30 142 Q30 152 40 152 L60 152 Q70 152 70 142 L70 50 Q63 44 63 38 L63 22" />
+            <line x1="30" y1="95" x2="70" y2="95" />
+          </svg>
+        </div>
+
+        {/* Vial Watermark - bleeding off the bottom-left corner */}
+        <div className="pointer-events-none absolute -bottom-6 -left-6 sm:-left-10 z-0 opacity-[0.06] text-brand-navy-500 w-[110px] sm:w-[150px] transform-gpu rotate-[-10deg]">
+          <svg viewBox="0 0 60 140" fill="none" stroke="currentColor" strokeWidth="1.2" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <rect x="20" y="5" width="20" height="10" rx="1" />
+            <path d="M20 15 L20 30 L14 40 L14 120 Q14 130 24 130 L36 130 Q46 130 46 120 L46 40 L40 30 L40 15" />
+            <line x1="14" y1="85" x2="46" y2="85" />
+            <line x1="14" y1="100" x2="46" y2="100" strokeDasharray="2 2" />
+          </svg>
+        </div>
+
+        {/* Mortar & Pestle Watermark - subtle accent near the footer transition */}
+        <div className="pointer-events-none absolute -bottom-10 right-[8%] z-0 opacity-[0.05] text-brand-navy-500 w-[130px] sm:w-[170px] transform-gpu rotate-[6deg]">
+          <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.3" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+            <path d="M20 50 Q20 82 50 86 Q80 82 80 50" />
+            <ellipse cx="50" cy="50" rx="30" ry="8" />
+            <line x1="56" y1="14" x2="70" y2="46" strokeLinecap="round" />
+            <ellipse cx="72" cy="49" rx="6" ry="4" transform="rotate(35 72 49)" />
           </svg>
         </div>
 
@@ -801,7 +813,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                 ) : (
                   categoryTabs
                     .filter((cat) => cat.id !== 'all')
-                    .map((category) => {
+                    .map((category, groupIdx) => {
                       const groupProducts = filteredProducts.filter(
                         (product) =>
                           product.category.en.toLowerCase().replace(/[^a-z0-9]+/g, '-') === category.id
@@ -809,11 +821,36 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                       if (groupProducts.length === 0) return null;
 
                       const groupCategoryName = isAr ? category.nameAr : category.name;
+                      const pharmaWatermarks = [
+                        <svg key="wm0" viewBox="0 0 100 160" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="32" y="8" width="20" height="14" rx="2" /><path d="M37 22 L37 38 Q37 44 30 50 L30 142 Q30 152 40 152 L60 152 Q70 152 70 142 L70 50 Q63 44 63 38 L63 22" /><line x1="30" y1="95" x2="70" y2="95" /></svg>,
+                        <svg key="wm1" viewBox="0 0 60 140" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="20" y="5" width="20" height="10" rx="1" /><path d="M20 15 L20 30 L14 40 L14 120 Q14 130 24 130 L36 130 Q46 130 46 120 L46 40 L40 30 L40 15" /><line x1="14" y1="85" x2="46" y2="85" /><line x1="14" y1="100" x2="46" y2="100" strokeDasharray="2 2" /></svg>,
+                        <svg key="wm2" viewBox="0 0 100 60" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><rect x="4" y="12" width="92" height="36" rx="18" /><line x1="50" y1="12" x2="50" y2="48" /></svg>,
+                        <svg key="wm3" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><circle cx="50" cy="50" r="42" /><line x1="50" y1="10" x2="50" y2="90" strokeDasharray="3 3" /></svg>,
+                        <svg key="wm4" viewBox="0 0 140 80" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><rect x="6" y="10" width="128" height="60" rx="30" /><line x1="70" y1="10" x2="70" y2="70" strokeDasharray="3 3" /></svg>,
+                        <svg key="wm5" viewBox="0 0 120 80" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="4" y="4" width="112" height="72" rx="8" /><circle cx="22" cy="22" r="9" /><circle cx="48" cy="22" r="9" /><circle cx="74" cy="22" r="9" /><circle cx="100" cy="22" r="9" /><circle cx="22" cy="58" r="9" /><circle cx="48" cy="58" r="9" /><circle cx="74" cy="58" r="9" /><circle cx="100" cy="58" r="9" /></svg>,
+                      ];
+                      const showWatermark = groupIdx % 2 === 0 && groupIdx > 0;
+                      const watermarkOnRight = (groupIdx / 2) % 2 === 0;
 
                       return (
                         <React.Fragment key={category.id}>
                           {/* Premium Section Divider */}
-                          <div className="flex items-center w-full mt-12 first:mt-4 mb-8 col-span-full" dir={isAr ? 'rtl' : 'ltr'}>
+                          <div className="relative isolate flex items-center w-full mt-12 first:mt-4 mb-8 col-span-full" dir={isAr ? 'rtl' : 'ltr'}>
+                            {showWatermark && (
+                              <div
+                                className={`pointer-events-none absolute top-1/2 -translate-y-1/2 -z-10 opacity-[0.04] text-brand-navy-500 w-[150px] sm:w-[200px] transform-gpu ${watermarkOnRight ? '-right-4 sm:-right-8 rotate-[10deg]' : '-left-4 sm:-left-8 rotate-[-10deg]'}`}
+                                style={{
+                                  WebkitMaskImage: watermarkOnRight
+                                    ? 'linear-gradient(to left, black 0%, transparent 75%)'
+                                    : 'linear-gradient(to right, black 0%, transparent 75%)',
+                                  maskImage: watermarkOnRight
+                                    ? 'linear-gradient(to left, black 0%, transparent 75%)'
+                                    : 'linear-gradient(to right, black 0%, transparent 75%)',
+                                }}
+                              >
+                                {pharmaWatermarks[(groupIdx / 2) % pharmaWatermarks.length]}
+                              </div>
+                            )}
                             <h3 className={`text-xl md:text-2xl font-bold text-[#143A6E] whitespace-nowrap ${isAr ? 'pl-6 pr-2 font-arabic' : 'pl-2 pr-6 font-sans'}`}>
                               {groupCategoryName}
                             </h3>
@@ -909,6 +946,33 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                   strokeWidth="2.5"
                   strokeLinecap="round"
                 />
+              </svg>
+
+              {/* Premium corner accents - subtle molecular/geometric details (top-left navy, bottom-right gold) */}
+              <svg
+                viewBox="0 0 100 100"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="absolute -top-6 -left-6 w-28 h-28 sm:w-36 sm:h-36 opacity-[0.06] text-[#143A6E] pointer-events-none z-0"
+              >
+                <polygon points="50,8 88,30 88,70 50,92 12,70 12,30" stroke="currentColor" strokeWidth="1.2" fill="none" />
+                <polygon points="50,28 70,40 70,60 50,72 30,60 30,40" stroke="currentColor" strokeWidth="0.8" fill="none" />
+                <circle cx="50" cy="8" r="2" fill="currentColor" />
+                <circle cx="88" cy="30" r="2" fill="currentColor" />
+                <circle cx="12" cy="70" r="2" fill="currentColor" />
+              </svg>
+
+              <svg
+                viewBox="0 0 100 100"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="absolute -bottom-6 -right-6 w-28 h-28 sm:w-36 sm:h-36 opacity-[0.07] text-[#F89C3A] pointer-events-none z-0"
+              >
+                <circle cx="50" cy="50" r="34" stroke="currentColor" strokeWidth="1" />
+                <circle cx="50" cy="50" r="20" stroke="currentColor" strokeWidth="0.7" strokeDasharray="2 3" />
+                <circle cx="50" cy="16" r="2.5" fill="currentColor" />
+                <circle cx="84" cy="50" r="2.5" fill="currentColor" />
+                <circle cx="50" cy="84" r="2.5" fill="currentColor" />
               </svg>
 
               {/* Absolute Close Button - Sleek floating circular button over top-right corner */}
