@@ -722,6 +722,25 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
           </svg>
         </div>
 
+        {/* Molecular / Hexagonal Texture Pattern - subtle full-width background for the lower section */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[1400px] z-0 opacity-[0.03] text-brand-navy-500 overflow-hidden">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="pharmaHexPattern" x="0" y="0" width="220" height="190" patternUnits="userSpaceOnUse">
+                <polygon points="60,10 100,30 100,70 60,90 20,70 20,30" fill="none" stroke="currentColor" strokeWidth="1" />
+                <polygon points="170,60 200,75 200,105 170,120 140,105 140,75" fill="none" stroke="currentColor" strokeWidth="0.8" />
+                <circle cx="60" cy="10" r="2" fill="currentColor" />
+                <circle cx="100" cy="30" r="2" fill="currentColor" />
+                <circle cx="20" cy="70" r="2" fill="currentColor" />
+                <circle cx="170" cy="60" r="2" fill="currentColor" />
+                <path d="M60 90 L60 130 L100 150" stroke="currentColor" strokeWidth="0.8" fill="none" />
+                <circle cx="100" cy="150" r="2" fill="currentColor" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#pharmaHexPattern)" />
+          </svg>
+        </div>
+
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           {/* Results Info */}
@@ -815,6 +834,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                         <svg key="wm3" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><circle cx="50" cy="50" r="42" /><line x1="50" y1="10" x2="50" y2="90" strokeDasharray="3 3" /></svg>,
                         <svg key="wm4" viewBox="0 0 140 80" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><rect x="6" y="10" width="128" height="60" rx="30" /><line x1="70" y1="10" x2="70" y2="70" strokeDasharray="3 3" /></svg>,
                         <svg key="wm5" viewBox="0 0 120 80" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="4" y="4" width="112" height="72" rx="8" /><circle cx="22" cy="22" r="9" /><circle cx="48" cy="22" r="9" /><circle cx="74" cy="22" r="9" /><circle cx="100" cy="22" r="9" /><circle cx="22" cy="58" r="9" /><circle cx="48" cy="58" r="9" /><circle cx="74" cy="58" r="9" /><circle cx="100" cy="58" r="9" /></svg>,
+                        <svg key="wm6" viewBox="0 0 100 130" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><path d="M28 25 Q28 65 50 70 Q72 65 72 25" /><line x1="50" y1="70" x2="50" y2="100" /><path d="M32 112 Q50 102 68 112" /><line x1="24" y1="112" x2="76" y2="112" /><path d="M50 15 C 20 25, 80 45, 35 55 C 5 62, 60 80, 45 95 C 38 100, 40 105, 44 106" /><circle cx="46" cy="105" r="2.2" fill="currentColor" stroke="none" /></svg>,
                       ];
                       const showWatermark = groupIdx > 0;
                       const watermarkOnRight = groupIdx % 2 === 0;
