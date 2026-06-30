@@ -17,14 +17,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Massoud Pharma | مسعود للصناعات الدوائية',
     description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma.',
-    images: [`${basePath}/logo-header.png`],
+    images: ['/logo-header.png'],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Massoud Pharma | مسعود للصناعات الدوائية',
     description: 'Interactive pharmaceutical catalog and corporate portfolio of Massoud Pharma.',
-    images: [`${basePath}/logo-header.png`],
+    images: ['/logo-header.png'],
   },
 };
 
