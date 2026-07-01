@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useId, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, FileText, AlertCircle, RefreshCw, Layers, X, Pill, Syringe, Package } from 'lucide-react';
-import { catalogData, getComputedCategoryTabs, Product, ProductVariant } from '../data/catalogData';
-import { convertToWesternNumerals, getProductImageUrl, getVariantImageUrl, basePath } from '../lib/utils';
+import { Search, AlertCircle, RefreshCw, Layers, X, Pill, Syringe, Package } from 'lucide-react';
+import { catalogData, getComputedCategoryTabs, Product } from '../data/catalogData';
+import { convertToWesternNumerals, getProductImageUrl, getVariantImageUrl } from '../lib/utils';
 import { useDebounce } from '../hooks/use-debounce';
 import Image from 'next/image';
 import ProductImage from './ProductImage';
@@ -18,7 +18,7 @@ const BrandedImageFallback = ({ title, isAr }: { title: string; isAr: boolean })
     <div className="absolute inset-0 bg-gradient-to-br from-brand-navy-950 to-brand-charcoal-900 flex flex-col items-center justify-center p-4 text-center select-none border border-brand-navy-800 rounded-xl">
       {/* Elegant glowing background motif */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-brand-yellow/5 blur-xl pointer-events-none" />
-      
+
       {/* Decorative molecular icon */}
       <div className="relative mb-2 p-1.5 bg-brand-navy-850/40 rounded-full border border-brand-navy-700/30">
         <svg className="h-5 w-5 text-brand-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" xmlns="http://www.w3.org/2000/svg">
@@ -68,7 +68,7 @@ const ProductCardImage = ({ product, isAr }: { product: Product; isAr: boolean }
 
           {/* Subtle background glow */}
           <div className="absolute -right-10 -bottom-10 w-24 h-24 rounded-full bg-brand-yellow/10 blur-xl pointer-events-none group-hover:bg-brand-yellow/20 transition-all duration-500 z-10" />
-          
+
           {/* Top row: Brand & clinical signifier */}
           <div className="absolute top-2 left-2 right-2 flex justify-between items-center z-20">
             <span className="text-[7px] font-mono tracking-widest text-slate-400 font-bold uppercase">
@@ -96,7 +96,7 @@ const ProductCardImage = ({ product, isAr }: { product: Product; isAr: boolean }
                 {product.id.substring(0, 5).toUpperCase()}
               </span>
             </div>
-            
+
             {/* Minimal barcode */}
             <div className="flex gap-[1px] h-2.5 items-end opacity-35 text-slate-900">
               <div className="w-[1px] h-full bg-current" />
@@ -112,7 +112,6 @@ const ProductCardImage = ({ product, isAr }: { product: Product; isAr: boolean }
   );
 };
 
-
 const getDosageFormType = (packaging: string): 'tablet' | 'capsule' | 'suspension' | 'syrup' | 'vial' | 'default' => {
   const p = packaging.toLowerCase();
   if (p.includes('suspension') || p.includes('معلق')) return 'suspension';
@@ -123,47 +122,6 @@ const getDosageFormType = (packaging: string): 'tablet' | 'capsule' | 'suspensio
   return 'default';
 };
 
-const translateToArabic = (text: string): string => {
-  const dictionary: Record<string, string> = {
-    // Dosages & Strengths with standard Western Arabic numerals as per strict specifications
-    '250 mg': '250 ملغ',
-    '500 mg': '500 ملغ',
-    '125 mg / 5 ml': '125 ملغ / 5 مل',
-    '250 mg / 5 ml': '250 ملغ / 5 ml',
-    '200 mg / 5 ml': '200 ملغ / 5 مل',
-    '10 mg': '10 ملغ',
-    '20 mg': '20 ملغ',
-    '40 mg': '40 ملغ',
-    '5 mg': '5 ملغ',
-    '25 mg': '25 ملغ',
-    '50 mg': '50 ملغ',
-    '135 mg': '135 ملغ',
-    '200 mg SR': '200 ملغ ممتد المفعول',
-    '1 mg / 1 ml': '1 ملغ / 1 مل',
-    '1000 mg': '1000 ملغ',
-    '120 mg / 5 ml': '120 ملغ / 5 مل',
-    '400 mg': '400 ملغ',
-    '600 mg': '600 ملغ',
-    '100 mg / 5 ml': '100 ملغ / 5 مل',
-    '5 mg / 5 ml': '5 ملغ / 5 مل',
-    '4 mg Chewable': '4 ملغ قابلة للمضغ',
-    '5 mg Chewable': '5 ملغ قابلة للمضغ',
-  };
-
-  return dictionary[text] || text;
-};
-
-// Custom React component that unconditionally replaces and enforces standard Western Arabic numerals (0-9)
-const ForceWesternDigits = ({ text }: { text: string | undefined | null }) => {
-  if (!text) return null;
-  const converted = convertToWesternNumerals(text);
-  const hasDigits = /[0-9]/.test(converted);
-  if (hasDigits) {
-    return <span dir="ltr" className="font-sans inline-block">{converted}</span>;
-  }
-  return <>{converted}</>;
-};
-
 const getCategoryStyles = (id: string, isActive: boolean) => {
   const base = "relative px-5 py-2.5 min-h-[44px] rounded-full font-sans text-xs font-bold transition-all duration-300 whitespace-nowrap shrink-0 snap-center md:snap-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 cursor-pointer select-none";
 
@@ -172,62 +130,6 @@ const getCategoryStyles = (id: string, isActive: boolean) => {
   }
 
   return `${base} bg-gradient-to-br from-[#FACC15] to-[#F89C3A] border border-white/40 text-[#143A6E] font-black shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_8px_20px_rgba(248,156,58,0.35)] after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-[#143A6E] after:rounded-full`;
-};
-
-
-
-const renderMedicineVisualLarge = (dosageForm: string) => {
-  const colorTheme = {
-    primary: 'fill-brand-navy-500 stroke-brand-navy-600',
-    secondary: 'fill-brand-navy-200 stroke-brand-navy-300',
-    accent: 'fill-brand-yellow',
-  };
-
-  switch (dosageForm) {
-    case 'capsule':
-      return (
-        <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-charcoal-50 to-brand-charcoal-100 border border-brand-charcoal-200/50 shadow-sm">
-          <svg className="h-10 w-10" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M10 16C10 12.6863 12.6863 10 16 10V22C12.6863 22 10 19.3137 10 16Z" className={colorTheme.primary} strokeWidth="1" />
-            <path d="M16 10C19.3137 10 22 12.6863 22 16C22 19.3137 19.3137 22 16 22V10Z" className={colorTheme.secondary} strokeWidth="1" />
-            <rect x="15" y="9" width="2" height="14" rx="1" className={colorTheme.accent} />
-          </svg>
-        </div>
-      );
-    case 'tablet':
-      return (
-        <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-charcoal-50 to-brand-charcoal-100 border border-brand-charcoal-200/50 shadow-sm">
-          <svg className="h-10 w-10" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="16" cy="16" r="9" className={colorTheme.primary} strokeWidth="1" />
-            <circle cx="16" cy="16" r="6.5" className={colorTheme.secondary} fillOpacity="0.4" strokeWidth="1" />
-            <line x1="16" y1="7" x2="16" y2="25" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="1.5 2" />
-            <circle cx="16" cy="16" r="1.5" className="fill-brand-yellow" />
-          </svg>
-        </div>
-      );
-    case 'suspension':
-    case 'syrup':
-      return (
-        <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-charcoal-50 to-brand-charcoal-100 border border-brand-charcoal-200/50 shadow-sm">
-          <svg className="h-10 w-10" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="11" y="13" width="10" height="13" rx="2" className={colorTheme.primary} strokeWidth="1" />
-            <rect x="13" y="9" width="6" height="4" className={colorTheme.secondary} strokeWidth="1" />
-            <rect x="12" y="7" width="8" height="2.5" rx="0.5" className={colorTheme.accent} />
-            <rect x="13.5" y="15" width="5" height="5" fill="#ffffff" rx="1" />
-            <line x1="15" y1="17.5" x2="17" y2="17.5" stroke="#000000" strokeWidth="1.2" strokeOpacity="0.3" />
-          </svg>
-        </div>
-      );
-    default:
-      return (
-        <div className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-charcoal-50 to-brand-charcoal-100 border border-brand-charcoal-200/50 shadow-sm">
-          <svg className="h-8 w-8 text-brand-navy-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" className="stroke-brand-navy-500" />
-            <path d="M12 8v8M8 12h8" className="stroke-brand-navy-500" />
-          </svg>
-        </div>
-      );
-  }
 };
 
 const getDosageIcon = (form: string) => {
@@ -251,7 +153,7 @@ const renderLargeShowcaseVisual = (form: string, strength: string) => {
             <line x1="50" y1="15" x2="50" y2="85" stroke="#ffffff" strokeWidth="0.75" strokeLinecap="round" strokeOpacity="0.6" />
             <text x="32" y="52" fill="#143A6E" fillOpacity="0.6" fontSize="5.5" fontWeight="bold" fontFamily="monospace">M P</text>
             <text x="56" y="52" fill="#F89C3A" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">{strength}</text>
-            
+
             <defs>
               <linearGradient id="tabletGrad" x1="15" y1="15" x2="85" y2="85" gradientUnits="userSpaceOnUse">
                 <stop stopColor="#ffffff" />
@@ -387,8 +289,8 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 24 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     y: 0,
     transition: {
       type: 'spring' as const,
@@ -430,7 +332,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
     setSelectedVariantIndex(index);
     if (selectedProduct) {
       const currentVariant = selectedProduct.variants[index];
-      const img = currentVariant?.variantImage || selectedProduct.mainImage;
+      const img = currentVariant?.variantImage || getVariantImageUrl(selectedProduct.id, index);
       setActiveImage(img);
       setIsImageLoading(true);
       setImgError(false);
@@ -508,11 +410,11 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
   const filteredProducts = catalogData.filter((product) => {
     const productTabId = product.category.en.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     const matchesTab = activeTab === 'all' || productTabId === activeTab;
-    
+
     const query = debouncedSearchQuery.toLowerCase().trim();
     if (!query) return matchesTab;
 
-    const matchesSearch = 
+    const matchesSearch =
       product.name.en.toLowerCase().includes(query) ||
       product.name.ar.toLowerCase().includes(query) ||
       product.activeIngredient.en.toLowerCase().includes(query) ||
@@ -566,49 +468,36 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
   };
 
   return (
-    <section 
-      id="products" 
+    <section
+      id="products"
       className="relative overflow-hidden bg-white text-brand-charcoal-800"
       aria-labelledby="catalog-title"
     >
       {/* Subtle Medical Plus Watermark */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-[0.03] z-0" 
-        style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M28 20h4v8h8v4h-8v8h-4v-8h-8v-4h8v-8z' fill='%23143A6E' fill-rule='evenodd'/%3E%3C/svg%3E")`, 
-          backgroundSize: '60px 60px' 
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.03] z-0"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M28 20h4v8h8v4h-8v8h-4v-8h-8v-4h8v-8z' fill='%23143A6E' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+          backgroundSize: '60px 60px'
         }}
       ></div>
-      
+
       {/* 1. UPPER ZONE: The Clean White Canvas */}
       <div className="relative z-10 bg-white py-12 sm:py-16 overflow-hidden">
-        
-        {/* Massive, absolute-positioned pharmaceutical / medical watermark behind text */}
-        <div 
-          className="pointer-events-none absolute top-0 left-0 z-0"
-          style={{ 
-            height: '85%',
-            maxHeight: '380px',
-            WebkitMaskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 85%)',
-            maskImage: 'linear-gradient(to right, black 0%, black 40%, transparent 85%)',
-          }}
-        >
-          <img src={`${basePath}/mp-icon-navy.svg`} alt="" className="h-full w-auto opacity-[0.08]" />
-        </div>
 
         <div className="sr-only" aria-live="polite" role="status">
           {srAnnouncement}
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          
+
           {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-xs font-bold tracking-wider text-brand-navy-500 uppercase">
               {t.preTitle}
             </span>
-            <h2 
-              id="catalog-title" 
+            <h2
+              id="catalog-title"
               className="mt-2 font-display text-2xl font-black tracking-tight text-brand-navy-500 sm:text-3xl"
             >
               {t.title}
@@ -660,19 +549,11 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
 
       {/* 2. THE NAVIGATION BAND: Premium Navy Zone */}
       <div className="relative bg-[#143A6E] py-8 overflow-hidden z-10">
-        
-        {/* Capsule Watermark - bleeding off the bottom-right corner */}
-        <div className="pointer-events-none absolute top-1/2 -translate-y-1/2 -right-10 sm:-right-16 z-0 opacity-[0.10] w-[220px] sm:w-[300px] transform-gpu rotate-[-14deg]">
-          <svg viewBox="0 0 100 60" fill="none" stroke="white" strokeWidth="1.3" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-            <rect x="4" y="12" width="92" height="36" rx="18" />
-            <line x1="50" y1="12" x2="50" y2="48" />
-          </svg>
-        </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Category Tablist (Intelligent Responsive Wrapping & Mobile Touch Draggable Swipe) */}
           <div className="rounded-2xl bg-white/5 p-2 border border-white/10 backdrop-blur-md">
-            <div 
+            <div
               ref={tabListRef}
               role="tablist"
               aria-label="Therapeutic pharmaceutical categories"
@@ -705,58 +586,23 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
 
       {/* 3. THE PRODUCT GRID BAND: Soft Gray Canvas */}
       <div className="relative bg-slate-50 py-12 sm:py-16 overflow-hidden z-10">
-        
-        {/* Large Anchor Bottle Watermark - vertically centered, side-fade only, no vertical clipping */}
-        <div 
-          className="pointer-events-none absolute top-0 right-0 h-full z-0 opacity-[0.05] text-brand-navy-500 flex items-center"
-          style={{
-            width: 'min(38vw, 420px)',
-            WebkitMaskImage: 'linear-gradient(to left, black 0%, black 30%, transparent 85%)',
-            maskImage: 'linear-gradient(to left, black 0%, black 30%, transparent 85%)',
-          }}
-        >
-          <svg viewBox="0 0 100 160" fill="none" stroke="currentColor" strokeWidth="1" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto translate-x-8">
-            <rect x="32" y="8" width="20" height="14" rx="2" />
-            <path d="M37 22 L37 38 Q37 44 30 50 L30 142 Q30 152 40 152 L60 152 Q70 152 70 142 L70 50 Q63 44 63 38 L63 22" />
-            <line x1="30" y1="95" x2="70" y2="95" />
-          </svg>
-        </div>
-
-        {/* Molecular / Hexagonal Texture Pattern - subtle full-width background for the lower section */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[1400px] z-0 opacity-[0.03] text-brand-navy-500 overflow-hidden">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="pharmaHexPattern" x="0" y="0" width="220" height="190" patternUnits="userSpaceOnUse">
-                <polygon points="60,10 100,30 100,70 60,90 20,70 20,30" fill="none" stroke="currentColor" strokeWidth="1" />
-                <polygon points="170,60 200,75 200,105 170,120 140,105 140,75" fill="none" stroke="currentColor" strokeWidth="0.8" />
-                <circle cx="60" cy="10" r="2" fill="currentColor" />
-                <circle cx="100" cy="30" r="2" fill="currentColor" />
-                <circle cx="20" cy="70" r="2" fill="currentColor" />
-                <circle cx="170" cy="60" r="2" fill="currentColor" />
-                <path d="M60 90 L60 130 L100 150" stroke="currentColor" strokeWidth="0.8" fill="none" />
-                <circle cx="100" cy="150" r="2" fill="currentColor" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#pharmaHexPattern)" />
-          </svg>
-        </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          
+
           {/* Results Info */}
           <div className="mb-6 text-xs font-bold text-brand-charcoal-400 flex items-center justify-between text-left rtl:text-right">
             <span>{t.resultsCount(filteredProducts.length)}</span>
           </div>
 
           {/* Product Cards Grid */}
-          <div 
+          <div
             id={`panel-${activeTab}`}
             role="tabpanel"
             aria-labelledby={`tab-btn-${activeTab}`}
             className="outline-none"
           >
             {filteredProducts.length === 0 ? (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -769,8 +615,8 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                   {isAr ? 'لم يتم العثور على مستحضرات' : 'No formulations found'}
                 </h3>
                 <p className={`mt-2 text-xs sm:text-sm text-brand-charcoal-500 leading-relaxed ${isAr ? 'font-arabic' : 'font-sans'}`}>
-                  {isAr 
-                    ? `لم يتم العثور على مستحضرات مطابقة لـ "${searchQuery || debouncedSearchQuery}"` 
+                  {isAr
+                    ? `لم يتم العثور على مستحضرات مطابقة لـ "${searchQuery || debouncedSearchQuery}"`
                     : `No products found matching "${searchQuery || debouncedSearchQuery}"`}
                 </p>
                 <button
@@ -785,7 +631,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                 </button>
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key={activeTab}
                 variants={containerVariants}
                 initial="hidden"
@@ -819,7 +665,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                 ) : (
                   categoryTabs
                     .filter((cat) => cat.id !== 'all')
-                    .map((category, groupIdx) => {
+                    .map((category) => {
                       const groupProducts = filteredProducts.filter(
                         (product) =>
                           product.category.en.toLowerCase().replace(/[^a-z0-9]+/g, '-') === category.id
@@ -827,37 +673,11 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                       if (groupProducts.length === 0) return null;
 
                       const groupCategoryName = isAr ? category.nameAr : category.name;
-                      const pharmaWatermarks = [
-                        <svg key="wm0" viewBox="0 0 100 160" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="32" y="8" width="20" height="14" rx="2" /><path d="M37 22 L37 38 Q37 44 30 50 L30 142 Q30 152 40 152 L60 152 Q70 152 70 142 L70 50 Q63 44 63 38 L63 22" /><line x1="30" y1="95" x2="70" y2="95" /></svg>,
-                        <svg key="wm1" viewBox="0 0 60 140" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="20" y="5" width="20" height="10" rx="1" /><path d="M20 15 L20 30 L14 40 L14 120 Q14 130 24 130 L36 130 Q46 130 46 120 L46 40 L40 30 L40 15" /><line x1="14" y1="85" x2="46" y2="85" /><line x1="14" y1="100" x2="46" y2="100" strokeDasharray="2 2" /></svg>,
-                        <svg key="wm2" viewBox="0 0 100 60" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><rect x="4" y="12" width="92" height="36" rx="18" /><line x1="50" y1="12" x2="50" y2="48" /></svg>,
-                        <svg key="wm3" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><circle cx="50" cy="50" r="42" /><line x1="50" y1="10" x2="50" y2="90" strokeDasharray="3 3" /></svg>,
-                        <svg key="wm4" viewBox="0 0 140 80" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><rect x="6" y="10" width="128" height="60" rx="30" /><line x1="70" y1="10" x2="70" y2="70" strokeDasharray="3 3" /></svg>,
-                        <svg key="wm5" viewBox="0 0 120 80" fill="none" stroke="currentColor" strokeWidth="1.2" className="w-full h-auto"><rect x="4" y="4" width="112" height="72" rx="8" /><circle cx="22" cy="22" r="9" /><circle cx="48" cy="22" r="9" /><circle cx="74" cy="22" r="9" /><circle cx="100" cy="22" r="9" /><circle cx="22" cy="58" r="9" /><circle cx="48" cy="58" r="9" /><circle cx="74" cy="58" r="9" /><circle cx="100" cy="58" r="9" /></svg>,
-                        <svg key="wm6" viewBox="0 0 100 130" fill="none" stroke="currentColor" strokeWidth="1.3" className="w-full h-auto"><path d="M28 25 Q28 65 50 70 Q72 65 72 25" /><line x1="50" y1="70" x2="50" y2="100" /><path d="M32 112 Q50 102 68 112" /><line x1="24" y1="112" x2="76" y2="112" /><path d="M50 15 C 20 25, 80 45, 35 55 C 5 62, 60 80, 45 95 C 38 100, 40 105, 44 106" /><circle cx="46" cy="105" r="2.2" fill="currentColor" stroke="none" /></svg>,
-                      ];
-                      const showWatermark = groupIdx > 0;
-                      const watermarkOnRight = groupIdx % 2 === 0;
 
                       return (
                         <React.Fragment key={category.id}>
                           {/* Premium Section Divider */}
-                          <div className="relative isolate flex items-center w-full mt-12 first:mt-4 mb-8 col-span-full" dir={isAr ? 'rtl' : 'ltr'}>
-                            {showWatermark && (
-                              <div
-                                className={`pointer-events-none absolute top-1/2 -translate-y-1/2 -z-10 opacity-[0.04] text-brand-navy-500 w-[150px] sm:w-[200px] transform-gpu ${watermarkOnRight ? '-right-4 sm:-right-8 rotate-[10deg]' : '-left-4 sm:-left-8 rotate-[-10deg]'}`}
-                                style={{
-                                  WebkitMaskImage: watermarkOnRight
-                                    ? 'linear-gradient(to left, black 0%, transparent 75%)'
-                                    : 'linear-gradient(to right, black 0%, transparent 75%)',
-                                  maskImage: watermarkOnRight
-                                    ? 'linear-gradient(to left, black 0%, transparent 75%)'
-                                    : 'linear-gradient(to right, black 0%, transparent 75%)',
-                                }}
-                              >
-                                {pharmaWatermarks[groupIdx % pharmaWatermarks.length]}
-                              </div>
-                            )}
+                          <div className="relative flex items-center w-full mt-12 first:mt-4 mb-8 col-span-full" dir={isAr ? 'rtl' : 'ltr'}>
                             <h3 className={`text-xl md:text-2xl font-bold text-[#143A6E] whitespace-nowrap ${isAr ? 'pl-6 pr-2 font-arabic' : 'pl-2 pr-6 font-sans'}`}>
                               {groupCategoryName}
                             </h3>
@@ -901,7 +721,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
       <AnimatePresence>
         {selectedProduct && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            
+
             {/* Glassmorphism Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -922,7 +742,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
               aria-modal="true"
               aria-labelledby="modal-trade-name"
             >
-              
+
               {/* Organic Premium "S" Capsule Background Watermark */}
               <svg
                 viewBox="0 0 100 100"
@@ -995,7 +815,7 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
               <div className="relative z-10">
                 {/* Master-Detail Split Header */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
-                  
+
                   {/* Left Column (Context & Typography - span 7) */}
                   <div className="relative overflow-hidden md:col-span-7 flex flex-col justify-center p-6 bg-slate-50 rounded-2xl border border-slate-200/60 shadow-xs min-h-[200px]">
 
@@ -1009,8 +829,8 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                       </div>
 
                       {/* Product Name */}
-                      <h3 
-                        id="modal-trade-name" 
+                      <h3
+                        id="modal-trade-name"
                         className={`text-3xl md:text-5xl font-extrabold text-[#143A6E] tracking-tight mt-3 leading-tight ${isAr ? 'font-arabic' : 'font-sans'}`}
                       >
                         {isAr ? selectedProduct.name.ar : selectedProduct.name.en}
@@ -1087,13 +907,8 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 auto-rows-fr">
                     {selectedProduct.variants.map((variant, index) => {
                       const isSelected = selectedVariantIndex === index;
-                      const strengthText = variant.strength[lang];
-                      const packagingText = variant.packaging[lang];
-                      
                       const IconComponent = getDosageIcon(variant.packaging.en);
-
                       const displayName = selectedProduct.name[lang];
-                      const titleText = `${displayName} | ${strengthText}`;
 
                       return (
                         <button
@@ -1102,14 +917,14 @@ export default function ProductCatalog({ lang }: ProductCatalogProps) {
                             handleSelectVariant(index);
                           }}
                           className={`flex items-stretch gap-4 rounded-xl p-4 text-left rtl:text-right transition-all duration-300 border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143A6E]/50 cursor-pointer h-full w-full ${
-                            isSelected 
-                              ? 'bg-slate-50/80 border-[#143A6E] ring-1 ring-[#143A6E]/30 shadow-md scale-[1.01]' 
+                            isSelected
+                              ? 'bg-slate-50/80 border-[#143A6E] ring-1 ring-[#143A6E]/30 shadow-md scale-[1.01]'
                               : 'bg-white border-slate-200 hover:border-[#143A6E]/40 hover:shadow-md'
                           }`}
                         >
                           <div className={`relative p-2 rounded-lg shrink-0 self-start transition-colors duration-300 w-12 h-12 flex items-center justify-center overflow-hidden border ${
-                            isSelected 
-                              ? 'bg-brand-navy-50 text-brand-navy-600 border-[#143A6E]' 
+                            isSelected
+                              ? 'bg-brand-navy-50 text-brand-navy-600 border-[#143A6E]'
                               : 'bg-slate-50 text-[#143A6E] border-slate-100'
                           }`}>
                             {variant.variantImage ? (

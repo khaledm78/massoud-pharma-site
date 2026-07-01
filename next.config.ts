@@ -1,13 +1,9 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-const nextConfig: any = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ['*'],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -27,7 +23,11 @@ const nextConfig: any = {
   assetPrefix: basePath,
   trailingSlash: true,
   transpilePackages: ['motion'],
-  webpack: (config: any, {dev}: any) => {
+  
+  // السطر الجديد لحل مشكلة المحرك
+  turbopack: {}, 
+  
+  webpack: (config: any, { dev }: any) => {
     if (dev && process.env.DISABLE_HMR === 'true') {
       config.watchOptions = {
         ignored: /.*/,

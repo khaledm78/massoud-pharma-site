@@ -1,6 +1,5 @@
 import type {Metadata} from 'next';
 import { Cairo } from 'next/font/google';
-import { basePath } from '../lib/utils';
 import './globals.css';
 
 const cairo = Cairo({ 
